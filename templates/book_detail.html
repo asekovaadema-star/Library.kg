@@ -1,0 +1,10 @@
+<h1>Название книги - {{ book_id.title }}</h1>
+<img src="{{ book_id.image.url }}" alt="" width="300" height="250">
+<p>Описание - {{ book_id.description }}</p>
+<p>Автор - {{ book_id.author }}</p>
+<p>Теги - {{ book_id.tags }}</p>
+<p>Жанры - {{ book_id.genres }}</p>
+<p>Тип - {{ book_id.type }}</p>
+<p>Состояние - {{ book_id.state }}</p>
+<a href="{{ book_id.url_book }}">Ссылка на книгу</a>
+<p>Дата - {{ book_id.created_at }}</p>

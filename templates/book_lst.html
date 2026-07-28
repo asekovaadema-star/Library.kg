@@ -1,0 +1,12 @@
+<h1>Список книг</h1>
+{% for i in blog_lst %}
+<hr><hr>
+
+<h2>Название книги - {{ i.title }}</h2>
+<img src="{{ i.image.url }}" alt="" width="300" height="250">
+<p>Дата - {{ i.created_at }}</p>
+<a href="/book_list/{{ i.id }}/">Подробнее</a>
+
+<hr><hr>
+
+{% endfor %}
