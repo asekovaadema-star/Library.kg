@@ -24,7 +24,8 @@ from horse_tour.views import location_list_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('book.urls')),
-    path('location_list/', location_list_view)
+    path('location_list/', location_list_view),
+    path('', include('myShop.urls')), 
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

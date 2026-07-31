@@ -10,7 +10,7 @@ def book_detail_view(request, id):
 def book_list_view(request):
     if request.method == 'GET':
         book_lst = models.Book.objects.all().order_by('-id')
-    return render(request, 'book_lst.html', {'blog_lst': book_lst})
+    return render(request, 'book_lst.html', {'book_lst': book_lst})
 
 def my_favorite_book(request):
     if request.method == 'GET':
