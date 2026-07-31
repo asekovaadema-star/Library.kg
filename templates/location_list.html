@@ -1,0 +1,15 @@
+<h1>Локации</h1>
+{% for i in location %}
+
+<h2>Название Локации - {{ i.title }}</h2>
+
+<h5>Номер телефона брони - {{ i.reservation.personal_number }}</h5>
+
+<h3>Категории</h3>
+<p>
+    {% for cat in i.categories.all %}
+        {{ cat.name }},
+    {% endfor %}
+</p>
+
+{% endfor %}
