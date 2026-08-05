@@ -1,0 +1,6 @@
+<h1>Сделать заказ</h1>
+<form action="/create_basket_book/" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Заказать</button>
+</form>

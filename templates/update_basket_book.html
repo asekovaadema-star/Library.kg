@@ -1,0 +1,7 @@
+<h1>Изменить заказ - {{ basket_book_id.name_order }}</h1>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Изменить</button>
+</form>
+<a href="/basket_book_list/">Отмена</a>
