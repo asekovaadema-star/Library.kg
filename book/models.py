@@ -9,7 +9,11 @@ class Book(models.Model):
     author = models.CharField(max_length=50)
     url_book = models.URLField(blank=True)
     type = models.CharField(max_length=20)
+    views = models.PositiveIntegerField(default=0, null=True)
     state = models.CharField(max_length=20)
     created_at= models.DateField(null = True)
+
+    def __str__(self):
+        return self.title
 
 

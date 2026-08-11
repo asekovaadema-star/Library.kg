@@ -1,10 +1,345 @@
-<h1>Название книги - {{ book_id.title }}</h1>
-<img src="{{ book_id.image.url }}" alt="" width="300" height="250">
-<p>Описание - {{ book_id.description }}</p>
-<p>Автор - {{ book_id.author }}</p>
-<p>Теги - {{ book_id.tags }}</p>
-<p>Жанры - {{ book_id.genres }}</p>
-<p>Тип - {{ book_id.type }}</p>
-<p>Состояние - {{ book_id.state }}</p>
-<a href="{{ book_id.url_book }}">Ссылка на книгу</a>
-<p>Дата - {{ book_id.created_at }}</p>
+{% include 'header.html' %}
+
+<h1>Кол-во просмотров - {{ book_id.views }}</h1>
+
+<div class="detail-container">
+    <div class="detail-card">
+        <!-- Хлебные крошки -->
+        <div class="breadcrumb">
+            <a href="/">Главная</a> / 
+            <a href="/book_list/">Книги</a> / 
+            <span>{{ book_id.title }}</span>
+        </div>
+
+        <div class="detail-wrapper">
+            <!-- Левая колонка - изображение -->
+            <div class="detail-image">
+                {% if book_id.image %}
+                    <img src="{{ book_id.image.url }}" alt="{{ book_id.title }}" width="300" height="250">
+                {% else %}
+                    <div class="no-image-large">
+                        📷 Обложка отсутствует
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Правая колонка - информация -->
+            <div class="detail-info">
+                <h1 class="detail-title">{{ book_id.title }}</h1>
+                
+                <div class="detail-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">✍️ Автор:</span>
+                        <span class="meta-value">{{ book_id.author|default:"Не указан" }}</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">📚 Жанры:</span>
+                        <span class="meta-value">{{ book_id.genres|default:"Не указаны" }}</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">🏷️ Теги:</span>
+                        <span class="meta-value">{{ book_id.tags|default:"Нет тегов" }}</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">📖 Тип:</span>
+                        <span class="meta-value">{{ book_id.type|default:"Не указан" }}</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">📌 Состояние:</span>
+                        <span class="meta-value status-badge">{{ book_id.state|default:"Не указано" }}</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">📅 Дата добавления:</span>
+                        <span class="meta-value">{{ book_id.created_at|date:"d.m.Y" }}</span>
+                    </div>
+                </div>
+
+                <!-- Описание -->
+                <div class="detail-description">
+                    <h3>📝 Описание</h3>
+                    <p>{{ book_id.description|default:"Описание отсутствует" }}</p>
+                </div>
+
+                <!-- Кнопки действий -->
+                <div class="detail-actions">
+                    {% if book_id.url_book %}
+                        <a href="{{ book_id.url_book }}" class="btn-read" target="_blank">
+                            📖 Читать книгу
+                        </a>
+                    {% endif %}
+                    <a href="/book_list/" class="btn-back">
+                        ← Назад к списку
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Стили для детальной страницы */
+    .detail-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px 20px 40px;
+    }
+    
+    .detail-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 35px 40px;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+    }
+    
+    /* Хлебные крошки */
+    .breadcrumb {
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #ecf0f1;}
+    
+    .breadcrumb a {
+        color: #3498db;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .breadcrumb a:hover {
+        color: #2980b9;
+        text-decoration: underline;
+    }
+    
+    .breadcrumb span {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+    
+    /* Две колонки */
+    .detail-wrapper {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+    }
+    
+    .detail-image {
+        flex: 0 0 300px;
+        text-align: center;
+    }
+    
+    .detail-image img {
+        border-radius: 12px;
+        border: 3px solid #ecf0f1;
+        width: 100%;
+        height: auto;
+        max-width: 300px;
+        transition: transform 0.3s;
+    }
+    
+    .detail-image img:hover {
+        transform: scale(1.02);
+    }
+    
+    .no-image-large {
+        width: 300px;
+        height: 250px;
+        background: #f8f9fa;
+        border: 3px dashed #dce1e8;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #95a5a6;
+        font-size: 18px;
+    }
+    
+    .detail-info {
+        flex: 1;
+        min-width: 280px;
+    }
+    
+    .detail-title {
+        font-size: 34px;
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #3498db;
+    }
+    
+    /* Мета-информация */
+    .detail-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 20px;
+        margin-bottom: 25px;
+        background: #f8f9fa;
+        padding: 18px 22px;
+        border-radius: 10px;
+    }
+    
+    .meta-item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 5px;
+    }
+    
+    .meta-label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 15px;
+        min-width: 90px;
+    }
+    
+    .meta-value {
+        color: #555;
+        font-size: 15px;
+        word-break: break-word;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        background: #3498db;
+        color: white;
+        padding: 2px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    
+    /* Описание */
+    .detail-description {
+        margin: 25px 0 30px;
+    }
+    
+    .detail-description h3 {
+        color: #2c3e50;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    
+    .detail-description p {
+        color: #555;
+        line-height: 1.8;
+        background: #fafafa;
+        padding: 18px 22px;
+        border-radius: 10px;
+        border-left: 4px solid #3498db;
+        margin: 0;
+    }
+    
+    /* Кнопки */
+    .detail-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    
+    .btn-read {
+        display: inline-block;
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+        padding: 12px 35px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn-read:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+    }
+    
+    .btn-back {
+        display: inline-block;
+        background: #95a5a6;
+        color: white;
+        padding: 12px 28px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    
+    .btn-back:hover {
+        background: #7f8c8d;
+        transform: translateY(-2px);
+    }
+    
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .detail-card {
+            padding: 20px;
+        }
+        
+        .detail-wrapper {
+            flex-direction: column;
+            align-items: center;}
+        
+        .detail-image {
+            flex: 0 0 auto;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .detail-image img {
+            max-width: 100%;
+        }
+        
+        .no-image-large {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+        }
+        
+        .detail-title {
+            font-size: 28px;
+            text-align: center;
+        }
+        
+        .detail-meta {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        
+        .meta-item {
+            flex-wrap: wrap;
+        }
+        
+        .detail-actions {
+            justify-content: center;
+        }
+        
+        .btn-read, .btn-back {
+            width: 100%;
+            text-align: center;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .detail-card {
+            padding: 15px;
+        }
+        
+        .detail-title {
+            font-size: 24px;
+        }
+        
+        .breadcrumb {
+            font-size: 12px;
+        }
+    }
+</style>
+
+{% include 'footer.html' %}
+

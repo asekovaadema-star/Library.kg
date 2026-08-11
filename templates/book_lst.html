@@ -1,12 +1,291 @@
-<h1>Список книг</h1>
-{% for i in blog_lst %}
-<hr><hr>
+{% include 'header.html' %}
 
-<h2>Название книги - {{ i.title }}</h2>
-<img src="{{ i.image.url }}" alt="" width="300" height="250">
-<p>Дата - {{ i.created_at }}</p>
-<a href="/book_list/{{ i.id }}/">Подробнее</a>
 
-<hr><hr>
+<style>
+    /* Контейнер для центрирования */
+    .search-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 40px auto;
+        padding: 0 16px;
+    }
 
-{% endfor %}
+    /* Форма */
+    .search-form {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 550px;
+        background-color: #ffffff;
+        border: 2px solid #e2e8f0;
+        border-radius: 50px;
+        padding: 6px 6px 6px 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    /* Эффект при клике на форму */
+    .search-form:focus-within {
+        border-color: #2563eb;
+        box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
+    }
+
+    /* Поле ввода */
+    .search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 1rem;
+        color: #1e293b;
+        font-family: inherit;
+    }
+
+    .search-input::placeholder {
+        color: #94a3b8;
+    }
+
+    /* Кнопка поиска */
+    .search-button {
+        background-color: #2563eb;
+        color: #ffffff;
+        border: none;
+        border-radius: 40px;
+        padding: 12px 24px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .search-button:hover {
+        background-color: #1d4ed8;
+    }
+
+    .search-button:active {
+        transform: scale(0.97);
+    }
+
+    /* Адаптивность для узких экранов */
+    @media (max-width: 480px) {
+        .search-form {
+            padding: 4px 4px 4px 16px;
+        }
+        .search-button {
+            padding: 10px 16px;
+            font-size: 0.875rem;
+        }
+    }
+</style>
+
+<div class="search-wrapper">
+    <form action="/search/" method="GET" class="search-form">
+        <input 
+            type="search" 
+            name="s" 
+            class="search-input" 
+            placeholder="Укажите название книги..." 
+            required
+        >
+        <button type="submit" class="search-button">
+            🔍 Поиск
+        </button>
+    </form>
+</div>
+
+<div class="books-container">
+    <h1 class="page-title">📖 Список книг</h1>
+    
+    {% for i in book_lst %}
+    <div class="book-item">
+        <div class="book-content">
+            <h2 class="book-title">
+                Название книги — <span>{{ i.title }}</span>
+            </h2>
+            
+            <div class="book-image">
+                {% if i.image %}
+                    <img src="{{ i.image.url }}" alt="{{ i.title }}" width="300" height="250">
+                {% else %}
+                    <p class="no-image">🖼️ Обложка отсутствует</p>
+                {% endif %}
+            </div>
+            
+            <p class="book-date">
+                📅 Дата — {{ i.created_at|date:"d.m.Y" }}
+            </p>
+            
+            <a href="/book_list/{{ i.id }}/" class="detail-link">
+                Подробнее →
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <p>😕 Книг пока нет в библиотеке</p>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    /* Стили только для списка книг */
+    .books-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px 20px 40px;
+    }
+    
+    .page-title {
+        text-align: center;
+        font-size: 36px;
+        color: #2c3e50;
+        margin-bottom: 40px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #3498db;
+        display: inline-block;
+        width: 100%;
+    }
+    
+    .book-item {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 25px 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border-left: 4px solid #3498db;
+    }
+    
+    .book-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        border-left-color: #e67e22;
+    }
+    
+    .book-title {
+        font-size: 26px;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+    
+    .book-title span {
+        color: #34495e;
+        font-weight: 400;
+    }
+    
+    .book-image {
+        margin: 15px 0 15px;
+    }
+    
+    .book-image img {
+        border-radius: 8px;
+        border: 2px solid #ecf0f1;
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .no-image {
+        color: #95a5a6;
+        font-style: italic;
+        padding: 20px 0;
+    }
+    
+    .book-date {
+        color: #7f8c8d;
+        font-size: 15px;
+        margin: 12px 0 18px;
+        background: #f8f9fa;
+        padding: 8px 16px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+    
+    .detail-link {
+        display: inline-block;
+        background: #3498db;
+        color: white;
+        padding: 10px 28px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .detail-link:hover {
+        background: #2980b9;
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        font-size: 20px;
+        color: #95a5a6;
+    }
+    
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .books-container {
+            padding: 10px 15px;
+        }
+        
+        .page-title {
+            font-size: 28px;
+        }
+        
+        .book-item {
+            padding: 18px 20px;
+        }
+        
+        .book-title {
+            font-size: 22px;
+        }
+        
+        .book-image img {
+            width: 100% !important;
+            height: auto !important;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .page-title {
+            font-size: 24px;
+        }
+        
+        .book-title {
+            font-size: 19px;
+        }
+        
+        .detail-link {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="pagination">
+        <span class="step-links">
+            {% if book_lst.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page={{ blog_lst.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ book_lst.number }} из {{ book_lst.paginator.num_pages }}.
+            </span>
+
+            {% if book_lst.has_next %}
+                <a href="?page={{ book_lst.next_page_number }}">Следующая</a>
+                <a href="?page={{ book_lst.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+{% include 'footer.html' %}

@@ -17,11 +17,33 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+from . import admin_panel
+
+JAZZMIN_SETTINGS = admin_panel.JAZZMIN_SETTINGS
+JAZZMIN_UI_TWEAKS = admin_panel.JAZZMIN_UI_TWEAKS
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b3(qbur-8!f+w*0c-+u$ffrw(pg6$etb1&kisayp5o#+a&$u72'
+from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+# Путь к директории проекта
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Загружаем данные из .env файла
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# Читаем SECRET_KEY (если его нет в окружении, можно вызывать ошибку для безопасности)
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+# Дополнительно рекомендуется сделать проверку, чтобы проект не запускался без ключа
+if not SECRET_KEY:
+    raise ValueError("В переменных окружения отсутствует SECRET_KEY!")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,6 +54,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
