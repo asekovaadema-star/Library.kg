@@ -1,0 +1,31 @@
+<h1>Каталог фильмов</h1>
+
+<form method="GET" action="/cine_board_list/">
+    <input type="text" name="q" placeholder="Поиск по названию..." value="{{ request.GET.q }}">
+    <button type="submit">Искать</button>
+</form>
+
+<h3>Жанры:</h3>
+<a href="/cine_board_list/">Все жанры</a> |
+{% for genre in genres %}
+    <a href="/cine_board_list/?genre={{ genre.id }}">{{ genre.name }}</a> |
+{% endfor %}
+
+<hr>
+
+<p><a href="/create_cine_board/">+ Добавить фильм</a></p>
+
+{% for film in cine_board_list %}
+    <div>
+        <h2><a href="/cine_board_detail/{{ film.id }}/">{{ film.title }}</a></h2>
+        
+        {% if film.poster %}
+            <img src="{{ film.poster.url }}" width="150">
+        {% endif %}
+        
+        <p><b>Цена:</b> {{ film.price }} сом</p> 
+    </div>
+    <hr>
+{% empty %}
+    <p>Фильмы не найдены.</p>
+{% endfor %}

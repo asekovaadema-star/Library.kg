@@ -1,0 +1,7 @@
+<h1>Изменить фильм - {{ cine_border_id.title }}</h1>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Изменить</button>
+</form>
+<a href="/cine_board_list/">Отмена</a>

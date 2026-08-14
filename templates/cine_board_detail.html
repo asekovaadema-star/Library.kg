@@ -1,0 +1,58 @@
+<h1>{{ film.title }}</h1>
+
+{% if film.poster %}
+    <img src="{{ film.poster.url }}" width="300">
+{% endif %}
+
+<p><b>Описание:</b> {{ film.description }}</p>
+<p><b>Режиссер:</b> {{ film.director }}</p>
+<p><b>Страна:</b> {{ film.country }}</p>
+<p><b>Длительность:</b> {{ film.duration }} мин</p> <!-- 👈 Исправили duration_minutes на duration -->
+<p><b>Возрастное ограничение:</b> {{ film.age_limit }}</p>
+<p><b>Цена:</b> {{ film.price }} сом</p>
+<p><b>Жанры:</b> {% for g in film.genres.all %}{{ g.name }} {% endfor %}</p>
+
+<!-- Кнопки CRUD (Редактировать и Удалить) -->
+<p>
+    <a href="/update_cine_board/{{ film.id }}/">Редактировать фильм</a> | 
+    <a href="/delete_cine_board/{{ film.id }}/">Удалить фильм</a> | 
+    <a href="/cine_board_list/">Назад к списку</a>
+</p>
+
+<hr>
+
+<h3>Забронировать VIP место</h3>
+{% if user.is_authenticated %}
+    {% if user.vipreservation %}
+        <p>Вы уже забронировали место #{{ user.vipreservation.seat_number }} на фильм "{{ user.vipreservation.film.title }}"</p>
+    {% else %}
+        <form action="/reserve_vip/{{ film.id }}/" method="post">
+            {% csrf_token %}
+            {{ vip_form.as_p }}
+            <button type="submit">Забронировать VIP</button>
+        </form>
+    {% endif %}
+{% else %}
+    <p><a href="/login_cine_board/">Войдите</a>, чтобы забронировать VIP место.</p>
+{% endif %}
+
+<hr>
+
+<h3>Комментарии</h3>
+{% for comment in film.comment_set.all %}
+    <p><b>{{ comment.author.username }}</b> ({{ comment.created_at|date:"d.m.Y H:i" }}):</p>
+    <p>{{ comment.text }}</p>
+    <hr>
+{% empty %}
+    <p>Комментариев пока нет.</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+    <form action="/add_comment/{{ film.id }}/" method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Оставить комментарий</button>
+    </form>
+{% else %}
+    <p><a href="/login_cine_board/">Войдите</a>, чтобы оставить комментарий.</p>
+{% endif %}

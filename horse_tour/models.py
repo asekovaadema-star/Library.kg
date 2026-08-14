@@ -10,7 +10,7 @@ class CategoryHorse(models.Model):
 
 class Location(models.Model):
     title = models.CharField(max_length=50)
-    categories = models.ManyToManyField(CategoryHorse, null=True)
+    categories = models.ManyToManyField(CategoryHorse, blank=True)
 
     def __str__(self):
         return f'{self.title} - {', '.join(i.name for i in self.categories.all())}'

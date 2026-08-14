@@ -1,0 +1,7 @@
+<h1>Личный кабинет</h1>
+<h2>Привет, {{ user.username }}</h2>
+
+<form action="/logout_cine_board/" method="POST">
+    {% csrf_token %}
+    <button type="submit">Выйти из личного кабинета</button>
+</form>
