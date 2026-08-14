@@ -18,13 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from horse_tour.views import location_list_view
+from horse_tour.views import LocationListView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('book.urls')),
-    path('location_list/', location_list_view),
+    path('location_list/', LocationListView.as_view()),
     path('', include('myShop.urls')), 
     path('', include('basket_book.urls')),
     path('', include('users.urls')),

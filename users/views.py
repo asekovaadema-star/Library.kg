@@ -3,37 +3,74 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from . import models, forms
+from django.views import generic
 
-def register_view(request):
-    if request.method == 'POST':
-        form_obj = forms.CustomRegisterForm(request.POST, request.FILES )
-        if form_obj.is_valid():
-           form_obj.save()
-           return redirect('/login/')
-    else:
+class RegisterView(generic.View):
+    def get(self, request):
         form_obj = forms.CustomRegisterForm()
-    return render(request, 'register.html', {'form': form_obj} )
+        return render(request, 'register.html', {'form': form_obj})
+    
+    def post(self, request):
+        form_obj = forms.CustomRegisterForm(request.POST, request.FILES)
+        if form_obj.is_valid():
+            form_obj.save()
+            return redirect('/login/')
 
-def auth_login_view(request):
-    if request.method == 'POST':
+# def register_view(request):
+#     if request.method == 'POST':
+#         form_obj = forms.CustomRegisterForm(request.POST, request.FILES )
+#         if form_obj.is_valid():
+#            form_obj.save()
+#            return redirect('/login/')
+#     else:
+#         form_obj = forms.CustomRegisterForm()
+#     return render(request, 'register.html', {'form': form_obj} )
+
+
+class AuthLoginView(generic.View):
+    def get(self, request):
+        form_obj = AuthenticationForm()
+        return render(request, 'login.html', {'form': form_obj})
+
+    def post(self, request):
         form_obj = AuthenticationForm(data=request.POST)
         if form_obj.is_valid():
             user = form_obj.get_user()
             login(request, user)
             return redirect('/profile/')
-    else:
-        form_obj = AuthenticationForm()
-    return render (request, 'login.html', {'form': form_obj})
+        return render(request, 'login.html', {'form': form_obj})
+# def auth_login_view(request):
+#     if request.method == 'POST':
+#         form_obj = AuthenticationForm(data=request.POST)
+#         if form_obj.is_valid():
+#             user = form_obj.get_user()
+#             login(request, user)
+#             return redirect('/profile/')
+#     else:
+#         form_obj = AuthenticationForm()
+#     return render (request, 'login.html', {'form': form_obj})
 
-def auth_logout_view(request):
-    logout(request)
-    return redirect('/login/')
-
-def profile_view(request):
-    if not request.user.is_authenticated:
+class AuthLogoutView(generic.View):
+    def get(self, request):
+        logout()
         return redirect('/login/')
-    user = models.CustomUser.objects.get(id =request.user.id)
-    return render (request, 'profile.html', {'user': user})
+
+# def auth_logout_view(request):
+#     logout(request)
+#     return redirect('/login/')
+
+class ProfileView(generic.View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        user = models.CastomUser.objects.get(id=request.user.id)
+        return render(request, 'profile.html', {'user': user})
+
+# def profile_view(request):
+#     if not request.user.is_authenticated:
+#         return redirect('/login/')
+#     user = models.CustomUser.objects.get(id =request.user.id)
+#     return render (request, 'profile.html', {'user': user})
 
 
 
